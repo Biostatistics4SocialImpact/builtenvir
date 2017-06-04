@@ -1,0 +1,11 @@
+Package: builtenvir
+Version: 0.1
+Date: 2017-5-15
+Title: Built EnviRonment
+Description: Functions for modeling the built environment
+Author: Andrew Whiteman <awhitem@umich.edu>
+Maintainer: Andrew Whiteman <awhitem@umich.edu>
+License: GPL (>= 2)
+Imports: nlme, ggplot2, Rcpp, RcppEigen
+LinkingTo: nlme, ggplot2, Rcpp, RcppEigen
+RoxygenNote: 6.0.1
