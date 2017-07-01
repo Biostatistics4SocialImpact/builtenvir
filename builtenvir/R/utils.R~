@@ -5,15 +5,15 @@
 
 
 
-## ## temporary solution to make.names() until I find a better way
-## ## to handle this
+## temporary solution to make.names() until I find a better way
+## to handle this
 
-## .remake.names <- function(x) {
-##   paste(deparse(substitute(x)),
-##         make.unique(colnames(x, do.NULL = FALSE, prefix = ""), sep = ""),
-##         sep = ""
-##         )
-## }
+.remake.names <- function(x) {
+  paste(deparse(substitute(x)),
+        make.unique(colnames(x, do.NULL = FALSE, prefix = ""), sep = ""),
+        sep = ""
+        )
+}
 
 
 
@@ -24,9 +24,8 @@
 sims.pval <- function(x, ref = 0, two.sided = TRUE) {
   x <- x - ref
   mu <- mean(x)
-  eps <- 1 / length(x)
   p <- 1 - (sum(x * sign(mu) > 0) + sum(x == 0) / 2) / length(x)
   if (two.sided)
     p <- 2 * p
-  max(min(p, 1 - eps), eps)
+  max(min(p, 1), 1 / length(x))
 }

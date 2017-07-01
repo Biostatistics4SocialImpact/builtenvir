@@ -1,39 +1,21 @@
 
 useDynLib(builtenvir)
 
-import(nlme)
-import(ggplot2)
+import(methods, nlme, ggplot2)
 import(RcppEigen)
 importFrom(Rcpp, sourceCpp)
 
 
-export(lag.basis)
-export(dlm)
+export(dlm, lag.basis, cr, fitted.Dlm, residuals.Dlm, predict.Dlm,
+       coef.Dlm, sigma.Dlm, logLik.Dlm, AIC.Dlm, vcov.Dlm,
+       summary.FreqDlm, summary.BayesDlm, plot.Dlm
+       )
 
-exportClasses(LagBasis)
-exportClasses(Dlm)
-exportClasses(FreqDlm)
-exportClasses(BayesDlm)
-exportClasses(SummaryDlm)
+exportClasses(LagBasis, Dlm, FreqDlm, BayesDlm, SummaryDlm, SmoothLag)
 
-exportMethods(omega)
-exportMethods(predict)
-exportMethods(coef)
-exportMethods(sigma)
-exportMethods(logLik)
-exportMethods(AIC)
-exportMethods(BIC)
-exportMethods(vcov)
-exportMethods(fixef)
-exportMethods(ranef)
-exportMethods(se.fixef)
-exportMethods(se.ranef)
-exportMethods(scaleMat)
-exportMethods(theta)
-exportMethods(vcov.theta)
-exportMethods(fitted)
-exportMethods(residuals)
-exportMethods(plot)
-exportMethods(show)
-exportMethods(summary)
-exportMethods(coef.sims)
+exportMethods("omega", "fixef", "ranef", "se.ranef", "se.fixef", "scaleMat",
+              "theta", "vcovTheta", "coef.sims", "show", "["
+              )
+
+
+

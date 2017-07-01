@@ -6,6 +6,7 @@ Description: Functions for modeling the built environment
 Author: Andrew Whiteman <awhitem@umich.edu>
 Maintainer: Andrew Whiteman <awhitem@umich.edu>
 License: GPL (>= 2)
+Depends: R (>= 3.0.2), methods
+LinkingTo: Rcpp, RcppEigen
 Imports: nlme, ggplot2, Rcpp, RcppEigen
-LinkingTo: nlme, ggplot2, Rcpp, RcppEigen
 RoxygenNote: 6.0.1

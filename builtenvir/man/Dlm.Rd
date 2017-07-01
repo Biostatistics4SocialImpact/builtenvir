@@ -4,68 +4,90 @@
 \alias{dlm}
 \title{Distributed Lag Models}
 \usage{
-dlm(y, X, Z, lags, intercept = TRUE, method = c("frequentist", "bayesian",
+dlm(formula, data, subset, na.action, method = c("frequentist", "bayesian",
   "Frequentist", "Bayesian"), control = list(), ...)
 }
 \arguments{
-\item{y}{model response variable}
+\item{formula}{an object of class \code{"\link[stats]{formula}"}:
+a symbolic description of the model to be fitted. See Details.}
 
-\item{X}{matrix of lag count data}
+\item{data}{an optional data frame, list, or environment containing the
+variables of the fitted model.}
 
-\item{Z}{covariate matrix  --> TODO: make optional?}
+\item{subset}{optional vector specifying a subset of observations to be used in the
+fitting process.}
 
-\item{lags}{lag distances for columns of \code{X}}
+\item{na.action}{optional function that indicates what should happen when the data contains
+\code{NA}'s.}
 
-\item{intercept}{\code{c(TRUE, FALSE)}; \code{TRUE} if an intercept
-should be included in the model}
+\item{method}{method used to fit the DLM. Partial matching and capitalization allowed.}
 
-\item{method}{\code{c("frequentist", "bayesian")}; method used to fit the
-DLM. Partial matching and capitalization allowed}
+\item{control}{a list of simulation control parameters. See Details.}
 
-\item{constrol}{\code{list(...)}; a list of control parameters.
-See 'Details'}
+\item{...}{Ignored for now.}
 }
 \value{
-An S4 \code{Dlm} object containing the results of the fitted model
+An S4 object that inherits from \code{"\link[=Dlm-class]{Dlm}"} containing
+the results of the fitted model. If construction of this object fails,
+\code{dlm} will issue a warning, and as a last resort attempt to return a
+list with components of the fitted model.
 }
 \description{
 Fit distributed lag models to distance-profiled data.
-\code{frequentist} method relies on \code{nlme::lme}.
+\code{frequentist} method relies on \code{\link[nlme]{lme}}.
 \code{bayesian} method uses Gibbs to sample from full conditionals,
 with sampling parameters named in the \code{control} list.
 }
 \details{
-\code{control} list specifies additional optional \code{"bayes"} method
+Models are specified using familiar R \code{formula} syntax with one set of
+lag terms returned by a given smoothing function (e.g. see \code{\link{cr}}).
+The smoothing function can be any that returns a \code{\link{SmoothLag}} basis
+object. Multiple lag terms or interactions with lag terms are not allowed, nor
+are \code{NA} and missing-value lag terms supported. See Examples
+for a basic call to \code{dlm} using the formula interface, and a cubic
+radial lag basis specified via \code{cr}.
+
+The \code{control} list specifies additional optional \code{"bayes"} method
 arguments, and may include: \code{n.sims}, the total number of simulations
-to run; \code{n.save}, the total number of simulations to save;
-\code{burnin}, number of simulations to discard from the start of the chain;
-\code{alpha.tau.prior}, prior (shape) parameter \eqn{\alpha_{\tau^2}};
-\code{beta.tau.prior}, prior (rate) parameter \eqn{\beta_{\tau^2}};
-\code{alpha.sigma.prior}, prior (shape) parameter \eqn{\alpha_{\sigma^2}};
-\code{beta.sigma.prior}, prior (rate) parameter \eqn{\beta_{\sigma^2}}.
+to run (default = 5000); \code{n.save}, the total number of simulations to
+save (default = 1000); \code{burnin}, number of simulations to discard from
+the start of the chain (default = 2000);
+\code{alpha.tau.prior}, prior (shape) parameter
+  \eqn{\alpha_{\tau^2}}{\alpha[\tau^2]} (default = 0.1);
+\code{beta.tau.prior}, prior (rate) parameter
+  \eqn{\beta_{\tau^2}}{\alpha[\tau^2]} (default = 1e-6);
+\code{alpha.sigma.prior}, prior (shape) parameter
+  \eqn{\alpha_{\sigma^2}}{\alpha[\sigma^2]} (default = 0.1);
+\code{beta.sigma.prior}, prior (rate) parameter
+  \eqn{\beta_{\sigma^2}}{\beta[\sigma^2]} (default = 1e-6).
 
 The prior distribution heirarchy we assume in the Bayesian
 formulation of the DLM is as follows:
 
-\deqn{
-  y \sim N(D \theta, \tau^2 I_n) \\
-  \theta \sim N(\mu_{\theta}, \Sigma_{\theta}) \\
-  \theta_{(lag)} \sim N(\mu_{\theta_{(lag)}}, \sigma^2 I_L) \\
-  \tau^2 \sim Inv-Gamma(\alpha_{\tau^2}, \frac{1}{\beta_{\tau^2}}) \\
-  \sigma^2 \sim Inv-Gamma(\alpha_{\sigma^2}, \frac{1}{\beta_{\sigma^2}})
-}
+\deqn{y \sim N(D \theta, \sigma^2 I_n)}{y ~ N(D * \theta, \sigma^2 * In)}
+\deqn{\theta \sim N(\mu_{\theta}, \Sigma_{\theta})}{\theta ~ N(\mu, \Sigma)}
+\deqn{\theta_l \sim N(\mu_l, \tau^2)}{\theta(l) ~ N(\mu(l), \tau^2)}
+\deqn{\sigma^2 \sim Inv-Gamma(\alpha_{\sigma^2}, \frac{1}{\beta_{\sigma^2}})}{\sigma^2 ~ Inv-Gamma(\alpha[\sigma^2], 1 / \beta[\sigma^2])}
+\deqn{\tau^2 \sim Inv-Gamma(\alpha_{\tau^2}, \frac{1}{\beta_{\tau^2}})}{\tau^2 ~ Inv-Gamma(\alpha[\tau^2], 1 / \beta[\tau^2])}
+
+Where \eqn{l \in L}{l :- L} indexes the set of lag coefficients.
 }
 \examples{
 data (simdata)
-y <- simdata[, 1]
-Z <- as.matrix(simdata[, 2:3])
-X <- as.matrix(simdata[, 4:ncol(simdata)])
-lg <- seq(0.1, 10, length.out = ncol(X))
-fit <- dlm(y, X, Z, lg)
-fit
+
+## Setup distance count matrix and corresponding lag distances
+X <- as.matrix(simdata[, -(1:3)])
+lag <- seq(0.1, 10, length.out = ncol(X))
+
+fit <- dlm(Y ~ Age + Gender + cr(lag, X), data = simdata)
+summary (fit)
 
 }
 \references{
 Baek J, et al. (2016) Epidemiology 27(1):116-24.
 (\href{https://www.ncbi.nlm.nih.gov/pubmed/26414942}{PubMed})
+}
+\seealso{
+\code{\link[nlme]{lme}}, \code{\link{cr}},
+  \code{\link{Dlm-class}}, \code{\link{FreqDlm}}, \code{\link{BayesDlm}}
 }

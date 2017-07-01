@@ -1,0 +1,38 @@
+
+#' @title Cubic Radial Basis
+#'
+#' @description
+#' Construct a natural cubic radial basis function for a given
+#' distance set vector and apply as a linear transformation of a
+#' covariate matrix.
+#'
+#' @param x
+#'   A vector of values to construct the basis from. Missing values
+#'   are not allowed.
+#'
+#' @param Z
+#'   A covariate matrix to take the basis transformation of.
+#'   \code{length(x)} should be the same as \code{ncol(Z)}.
+#'   Missing values are not allowed.
+#'
+#' @details
+#'   \code{...} arguments are passed to \code{\link{lag.basis}}
+#'
+#' @return
+#' An S4 object of class \code{\link{SmoothBasis}}
+#'
+
+cr <- function(x, Z, ...) {
+  if (any(is.na(x)) || any(is.na(Z)))
+    stop ("missing values not allowed")
+  if (length(x) != ncol(Z <- as.matrix(Z)))
+    stop ("arguments do not have compatible dimensions")
+  basis <- lag.basis(x, ...)
+  .SmoothLag(Z %*% basis@C0, random = Z %*% basis@K1, basis = basis,
+             signature = deparse(sys.call())
+             )
+}
+
+
+
+

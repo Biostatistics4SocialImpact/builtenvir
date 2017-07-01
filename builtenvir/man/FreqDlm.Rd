@@ -7,8 +7,8 @@
 \title{Classical Distributed Lag Model}
 \description{
 Parameters and summaries from a classically fit DLM (freqentist;
-model fit using \code{\link{nlme::lme}}). Inherits from
-\code{\link{Dlm}}.
+model fit using \code{\link[nlme]{lme}}). Inherits from
+\code{"\link{Dlm-class}"}.
 }
 \section{Slots}{
 
@@ -21,5 +21,6 @@ Baek J, et al. (2016) Epidemiology 27(1):116-24.
 (\href{https://www.ncbi.nlm.nih.gov/pubmed/26414942}{PubMed})
 }
 \seealso{
-\code{\link{dlm}}, \code{\link{lme}}
+\code{\link{dlm}}, \code{\link[nlme]{lme}},
+  \code{\link{Dlm-class}}, \code{\link{BayesDlm}}
 }

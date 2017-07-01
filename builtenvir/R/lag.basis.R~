@@ -25,6 +25,7 @@
 #' lb <- lag.basis(l)
 #'
 
+#' @export
 lag.basis <- function(lag, center = TRUE, scale = FALSE) {
   ## scale and center lag, if desired
   cntr <- 0

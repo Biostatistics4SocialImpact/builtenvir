@@ -26,6 +26,9 @@ parameters}
 \item{\code{tTable}}{t-statistic table summaries of fixed effects with (approximate)
 significance}
 
+\item{\code{lag.coefs}}{A matrix with rough distributional summaries of the fitted lag
+coefficients, like estimates and confidence or posterior intervals.}
+
 \item{\code{cor.fixef}}{Correlation matrix of fixed effects}
 
 \item{\code{residuals}}{Numeric vector with the residuals from the fitted model}

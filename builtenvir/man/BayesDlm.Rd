@@ -7,7 +7,7 @@
 \title{Bayesian Distributed Lag Model}
 \description{
 Parameters and summaries from a Bayesian DLM. Inherits from
-\code{\link{Dlm}}.
+\code{"\link{Dlm-class}"}.
 }
 \section{Slots}{
 
@@ -26,5 +26,5 @@ Baek J, et al. (2016) Epidemiology 27(1):116-24.
 (\href{https://www.ncbi.nlm.nih.gov/pubmed/26414942}{PubMed})
 }
 \seealso{
-\code{\link{dlm}}
+\code{\link{dlm}}, \code{\link{Dlm-class}}, \code{\link{FreqDlm}}
 }
